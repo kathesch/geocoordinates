@@ -1,6 +1,6 @@
 # Geographic coordinates coding problem 
 
-Contained is my solution for the geographic coordinates coding problem. The Julia version of this code can be found at https://github.com/kathesch/GeoCoordinates.
+Contained is my solution for the geographic coordinates coding problem. The Julia version of this code can be found at https://github.com/kathesch/GeoCoordinates.jl.
 
 ## Installation 
 
