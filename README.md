@@ -1,21 +1,27 @@
 # Geographic coordinates coding problem 
 
-Contained is my solution for the geographic coordinates coding problem. There should be the following within this folder:
+Contained is my solution for the geographic coordinates coding problem. The Julia version of this code can be found at https://github.com/kathesch/GeoCoordinates.
 
-* The dataset `lla_coordinate_time_series.csv`
+## Installation 
 
-* The solution `geo-coordinates.py` file which outputs the two values to stdout
+Run the following in terminal to install geocoordinates with pip
 
-Additionally, there is a much more robust Julia implementation available at the private repository https://github.com/kathesch/GeoCoordinates.jl. This can be imported to any julia repl and is a good showcase of visualizations of this data. E-mail katherinegruenewald@gmail.com with your github information for access.  
+`pip install geocoordinates`
 
-## Installation and Running 
+## Running 
 
-1. Open a terminal with the working directory in this file. 
-2. Run the following line to activate the virtual environment.
-   ```
-   source GeoCoordinates/bin/activate
-   ```
-3. Run the `geo-coordinates.py` script
-   ```
-   python GeoCoordinatespy
-   ```
+1. Open a python REPL
+2. `import geocoordinates as gc`
+3. `gc.time_series_analysis()`
+
+```python
+~ % python
+Python 3.10.7 (main, Sep 14 2022, 22:38:23) [Clang 14.0.0 (clang-1400.0.29.102)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import geocoordinates as gc
+>>> gc.time_series_analysis()
+Velocity at Unix time  1532334000 :
+ [ -995.91526875 -2514.43889398    55.92122005] m/s
+Velocity at Unix time  1532335268 :
+ [-3471.02128308  1760.25788787 -4867.4760627 ] m/s
+ ```

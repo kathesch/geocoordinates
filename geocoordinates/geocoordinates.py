@@ -1,9 +1,9 @@
-
 # %%
 import numpy as np
 import pandas as pd
 import math
 from math import *
+import os
 
 # %%
 a = 6378137 #semimajor axis
@@ -104,35 +104,35 @@ def lin_interp(t, xs, ys):
 
 # %%
 #Data transformations
-#Import data 
-df = pd.read_csv("./data/lla_coordinate_time_series.csv",names=["T","phi", "lamb","h"])
+#Import data
+def time_series_analysis(): 
+    df = pd.read_csv(os.path.dirname(__file__) + "/lla_coordinate_time_series.csv",names=["T","phi", "lamb","h"])
+    #converts altitude to meters
+    df['h'] = df['h'] * 1000
 
- #converts altitude to meters
-df['h'] = df['h'] * 1000
+    #converts latitude, longitude, altitude to XYZ position vectors 
+    df['P'] = df[['phi', 'lamb','h']].apply(lambda x : lla2xyz(x['phi'], x['lamb'], x['h']), axis=1)
 
-#converts latitude, longitude, altitude to XYZ position vectors 
-df['P'] = df[['phi', 'lamb','h']].apply(lambda x : lla2xyz(x['phi'], x['lamb'], x['h']), axis=1)
+    #breaks XYZ positions into X, Y, Z vectors for easier plotting 
 
-#breaks XYZ positions into X, Y, Z vectors for easier plotting 
+    df[['X','Y','Z']] = [*df['P']]
+    #computes differences in adjacents times for velocity calculation
+    df['dT'] = df['T'].diff()
+    df['dT'] = df['dT'].fillna(1)
 
-df[['X','Y','Z']] = [*df['P']]
-#computes differences in adjacents times for velocity calculation
-df['dT'] = df['T'].diff()
-df['dT'] = df['dT'].fillna(1)
+    #computes differences in adjacents positions for velocity calculation
+    df['dP'] = df['P'].diff()
+    df['dP'] = [np.zeros(3) if x is np.NaN else x for x in df['dP'] ]
 
-#computes differences in adjacents positions for velocity calculation
-df['dP'] = df['P'].diff()
-df['dP'] = [np.zeros(3) if x is np.NaN else x for x in df['dP'] ]
+    #divides position difference by time differences to obtain velocity
+    df['V'] = df[['dP','dT']].apply(lambda x : x['dP'] / x['dT'],  axis=1)
 
-#divides position difference by time differences to obtain velocity
-df['V'] = df[['dP','dT']].apply(lambda x : x['dP'] / x['dT'],  axis=1)
+    #breaks V velocities into X, Y, Z vectors for easier plotting
+    df[['Vx','Vy','Vz']] = [*df['V']]
 
-#breaks V velocities into X, Y, Z vectors for easier plotting
-df[['Vx','Vy','Vz']] = [*df['V']]
-
-# %%
-#print to stdout for two time values. 
-t1,t2 = 1532334000, 1532335268
-v1,v2 = lin_interp(t1, df['T'],df['V']), lin_interp(t2, df['T'],df['V'])
-print("Velocity at Unix time ", t1, ":\n",v1,"m/s")
-print("Velocity at Unix time ", t2, ":\n",v2,"m/s")
+    # %%
+    #print to stdout for two time values. 
+    t1,t2 = 1532334000, 1532335268
+    v1,v2 = lin_interp(t1, df['T'],df['V']), lin_interp(t2, df['T'],df['V'])
+    print("Velocity at Unix time ", t1, ":\n",v1,"m/s")
+    print("Velocity at Unix time ", t2, ":\n",v2,"m/s")

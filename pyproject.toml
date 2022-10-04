@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "geo-coordinates"
-version = "0.1.0"
+name = "geocoordinates"
+version = "0.1.21"
 description = ""
 authors = ["kathesch <katherinegruenewald@gmail.com>"]
 readme = "README.md"
-packages = [{include = "geo_coordinates"}]
+packages = [{include = "geocoordinates"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
